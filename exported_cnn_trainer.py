@@ -63,9 +63,10 @@ for im_path in dir_contents:
 
 # %%
 # Create x_dataset and y_dataset
-x_dataset = np.array([img[1] for img in im_set[:200]])
-y_dataset = np.array([img[0] for img in im_set[:200]])
+x_dataset = np.array([img[1] for img in im_set[:]])
+y_dataset = np.array([img[0] for img in im_set[:]])
 x_dataset = x_dataset/255.0
+del(im_set)
 # TODO: may need this x_dataset = x_dataset.reshape(len(x_dataset), len(x_dataset[0]), len(x_dataset[0][0]),-1)
 
 # %%
@@ -114,7 +115,7 @@ conv_model.compile(loss='mse', optimizer=optimizers.RMSprop(learning_rate=LEARNI
 # %%
 # Train CNN
 begin = 0
-for i in range(len(x_dataset)//5, len(x_dataset) - len(x_dataset)//5, len(x_dataset)//5):
+for i in range(len(x_dataset)//5, len(x_dataset), len(x_dataset)//5):
     history_conv = conv_model.fit(x_dataset[begin:i], y_dataset[begin:i], 
                                 validation_split=VALIDATION_SPLIT, 
                                 epochs=20, 
