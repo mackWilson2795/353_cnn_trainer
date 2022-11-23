@@ -63,7 +63,7 @@ for im_path in dir_contents:
 
 # %%
 # Create x_dataset and y_dataset
-x_dataset = np.array([img[1] for img in im_set[:]])
+x_dataset = np.array([img[1][360:] for img in im_set[:]])
 y_dataset = np.array([img[0] for img in im_set[:]])
 x_dataset = x_dataset/255.0
 del(im_set)
@@ -91,7 +91,7 @@ def reset_weights(model):
 # Set up CNN
 conv_model = models.Sequential()
 conv_model.add(layers.Conv2D(3, (5, 5), activation='relu',
-                        input_shape=(720, 1280, 1)))
+                        input_shape=(360, 1280, 1)))
 conv_model.add(layers.MaxPooling2D((2, 2)))
 conv_model.add(layers.Conv2D(24, (5, 5), activation='relu'))
 conv_model.add(layers.MaxPooling2D((2, 2)))
@@ -104,7 +104,7 @@ conv_model.add(layers.MaxPooling2D((2, 2)))
 conv_model.add(layers.Flatten())
 conv_model.add(layers.Dropout(0.5))
 conv_model.add(layers.Dense(512, activation='relu'))
-conv_model.add(layers.Dense(36, activation='relu'))
+conv_model.add(layers.Dense(50, activation='relu'))
 conv_model.add(layers.Dense(10, activation='relu'))
 conv_model.add(layers.Dense(4, activation='softmax'))
 conv_model.compile(loss='mse', optimizer=optimizers.RMSprop(learning_rate=LEARNING_RATE), metrics=['acc'])
@@ -115,12 +115,14 @@ conv_model.compile(loss='mse', optimizer=optimizers.RMSprop(learning_rate=LEARNI
 # %%
 # Train CNN
 begin = 0
-for i in range(len(x_dataset)//5, len(x_dataset), len(x_dataset)//5):
-    history_conv = conv_model.fit(x_dataset[begin:i], y_dataset[begin:i], 
+block_length = len(x_dataset) // 5
+for i in range(block_length, len(x_dataset), block_length):
+    history_conv = conv_model.fit(x_dataset[begin:block_length], y_dataset[begin:block_length], 
                                 validation_split=VALIDATION_SPLIT, 
                                 epochs=20, 
-                                batch_size=16)
-    begin = i
+                                batch_size=8)
+    x_dataset = x_dataset[:block_length]
+    y_dataset = y_dataset[:block_length]
 
 # %%
 
