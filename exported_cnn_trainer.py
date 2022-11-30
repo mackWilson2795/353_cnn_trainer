@@ -121,8 +121,8 @@ for i in range(block_length, len(x_dataset), block_length):
                                 validation_split=VALIDATION_SPLIT, 
                                 epochs=20, 
                                 batch_size=8)
-    x_dataset = x_dataset[:block_length]
-    y_dataset = y_dataset[:block_length]
+    x_dataset = x_dataset[block_length:]
+    y_dataset = y_dataset[block_length:]
 
 # %%
 
