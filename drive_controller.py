@@ -18,10 +18,9 @@ class driver_controller:
 
     def __init__(self, save_path = SAVE_PATH) -> None:
         one_hot_ref = {
-            np.array([1.,0.,0.,0.]): 'L',
-            np.array([0.,1.,0.,0.]): 'F',
-            np.array([0.,0.,1.,0.]): 'R',
-            np.array([0.,0.,0.,1.]): 'S'
+            np.array([1.,0.,0.]): 'L',
+            np.array([0.,1.,0.]): 'F',
+            np.array([0.,0.,1.]): 'R',
         }
         conv_model = models.load_model(save_path)
 
@@ -40,6 +39,7 @@ class driver_controller:
             move.linear.x = 0.0
             move.angular.z -1.0
         else:
+            # TODO: maybe remove this:
             move.linear.x = 0.0
             move.angular.z = 0.0
         return move
@@ -68,6 +68,6 @@ class driver_controller:
         conv_model.add(layers.Dense(512, activation='relu'))
         conv_model.add(layers.Dense(50, activation='relu'))
         conv_model.add(layers.Dense(10, activation='relu'))
-        conv_model.add(layers.Dense(4, activation='softmax'))
+        conv_model.add(layers.Dense(3, activation='softmax'))
         conv_model.compile(loss='mse', optimizer=optimizers.RMSprop(learning_rate=self.LEARNING_RATE), metrics=['acc'])
         return conv_model
