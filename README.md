@@ -1,3 +1,5 @@
+# Convolutional Neural Network Trainer
+
 This collection of Jupyter Notebooks was used to train four separate Convolutional Neural Networks for the ENPH 353 introduction to machine learning competition.
 
 There are two networks which are used to read license plates, the first of which (DST) is used to read the license plates stall number (destination number), the second of which is used to read the characters of the license plate itself.
